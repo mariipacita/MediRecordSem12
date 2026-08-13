@@ -4,10 +4,31 @@
  */
 package patients;
 
+import java.util.HashMap;
+
 /**
  *
  * @author PC
  */
-public class patienList {
+public class patienList implements KeyDynamicList<Patient,String> {
+    private HashMap<String, Patient> patiens;
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
 }
