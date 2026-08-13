@@ -10,7 +10,7 @@ import java.util.HashMap;
  *
  * @author PC
  */
-public class patienList implements KeyDynamicList<Patient,String> {
+public class patienList implements KeyDynamicsList<Patient,String> {
     private HashMap<String, Patient> patiens;
 
     

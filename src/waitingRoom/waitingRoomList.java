@@ -8,6 +8,6 @@ package waitingRoom;
  *
  * @author PC
  */
-public class waitingRoomList {
+public class waitingRoomList implements SequentialDynamicLists<Patin {
     
 }
