@@ -6,6 +6,7 @@ package waitingRoom;
 
 import clinic.SequentialDynamicLists;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Queue;
 import patients.Patient;
 
@@ -15,9 +16,10 @@ import patients.Patient;
  */
 public class waitingRoomList implements SequentialDynamicLists<Patient> {
     Queue<Patient> waitingList;
+    //queue porque elprimero que llego tiene que ser el primero en pasar a consulta
 
-    public waitingRoomList(Queue<Patient> waitingList) {
-        this.waitingList = waitingList;
+    public waitingRoomList() {
+        this.waitingList = new LinkedList();
     }
     
     
@@ -26,33 +28,45 @@ public class waitingRoomList implements SequentialDynamicLists<Patient> {
 
     @Override
     public Patient get() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return waitingList.peek();
     }
+        
 
     @Override
     public boolean remove() {
-         return waitingList.remove(id)!= null;
+         return waitingList.poll()!=null;
     }
 
     @Override
     public boolean add(Patient item) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try{
+            
+        
+      return  waitingList.add(item);
+        }catch(IllegalStateException){
+            return false;
+        }
     }
+    
 
     @Override
     public Iterator getAll() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+
+        return waitingList.iterator();
     }
+       
 
     @Override
     public int size() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+      return  waitingList.size();
     }
+        
 
     @Override
     public boolean isEmpty() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return waitingList.isEmpty();
     }
+        
     
     
 }
