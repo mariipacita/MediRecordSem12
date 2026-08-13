@@ -12,6 +12,8 @@ import java.util.HashMap;
  */
 public class patienList implements KeyDynamicList<Patient,String> {
     private HashMap<String, Patient> patiens;
+
+    
     
     
     
