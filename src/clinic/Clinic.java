@@ -26,8 +26,8 @@ public class Clinic {
     public Clinic() {
 
         this.patients = new patienList();
-        this.appointments = new AppointmentList;
-        this.waitingRoom = new waitingRoomList;
+        this.appointments = new AppointmentList();
+        this.waitingRoom = new waitingRoomList();
     }
 
     public boolean addPatient(Patient patient) {
