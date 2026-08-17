@@ -23,7 +23,7 @@ public class patienList implements KeyDynamicsList<Patient,String> {
      return patients.get(id);  
     }
 
-    public boolean remove(Patient id) {
+    public boolean remove(String id) {
         return patients.remove(id)!=null;
     }
 
