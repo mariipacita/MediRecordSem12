@@ -23,14 +23,11 @@ public class Clinic {
     private AppointmentList appointments;
     private waitingRoomList waitingRoom;
 
-    public Clinic(
-            patienList patients,
-            AppointmentList appointments,
-            waitingRoomList waitingRoom) {
+    public Clinic() {
 
-        this.patients = patients;
-        this.appointments = appointments;
-        this.waitingRoom = waitingRoom;
+        this.patients = new patienList();
+        this.appointments = new AppointmentList;
+        this.waitingRoom = new waitingRoomList;
     }
 
     public boolean addPatient(Patient patient) {
