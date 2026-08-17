@@ -7,6 +7,7 @@ package clinic;
 /**
  *
  * @author PC
+ * @param <T>
  */
 public interface views<T> {
     
@@ -15,7 +16,7 @@ public interface views<T> {
     public void showError(String error);
     public void showMessage(String message);
     
-    
+   
     
     
     
