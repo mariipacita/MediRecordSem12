@@ -43,7 +43,7 @@ public class waitingRoomList implements SequentialDynamicLists<Patient> {
             
         
       return  waitingList.add(item);
-        }catch(IllegalStateException){
+        }catch(IllegalStateException e){
             return false;
         }
     }
