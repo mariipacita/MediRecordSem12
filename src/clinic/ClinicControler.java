@@ -69,24 +69,39 @@ public class ClinicControler {
         
     }
 
-    public boolean scheduleAppointment(Appointment appointment){
-        
-        
-        return false;
+    public boolean scheduleAppointment(Appointment appo){
+       boolean status = clinic.scheduleAppointment(appo);
+       if(status){
+           view.showMessage("Cita agendada correctamente");          
+       }else{
+           view.showError("Cita no se pudo agendar correctamente");
+           
+    }
     }
 
-    public Appointment findAppointment(String code){
-        return null;
+    public Appointment findAppointment(String code)
+    { Appointment appo= clinic.findAppointment(code);
+     if (appo == null){
+         view.showError("No se encuentra una cita con el codigo: "+ code);
+         view.clear();
+     }
+         view.showData(appo);
+         return appo;
+     
+      
+        
     }
 
     public boolean rescheduleAppointment(String code, LocalDate newDate, LocalTime newTime){
-    if (clinic.rescheduleAppointment(code, newDate, newTime)){
+        
+        boolean status=clinic.rescheduleAppointment(code, newDate, newTime);
+    if (status){
         view.showMessage("Cita correctamente reagendada");
     }else{
         view.showError("No se pudo reagendar la cita");
     }
         
-         
+     return status;    
       
     }
 
@@ -116,6 +131,9 @@ public class ClinicControler {
     }
 
     public boolean isPatientWaiting(String patientId){
+       
+            
+        
         return false;
     }
   
