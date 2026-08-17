@@ -15,12 +15,10 @@ import java.util.TreeSet;
 public class AppointmentList implements KeyDynamicsList<Appointment,String >{
     TreeSet<Appointment> appointments;
 
-    public AppointmentList(TreeSet<Appointment> appointments) {
-        this.appointments = new TreeSet();
-    }
-    
     
 
+   
+    
     @Override
     public Appointment get(String code) {
        for(Appointment appo: appointments){
