@@ -52,20 +52,38 @@ public class ClinicControler {
    }
     
    public void addPatient(Patient patient){
-       
+      if( clinic.addPatient(patient)){
+          view.showMessage("Paciente agregado correctamente");
+      }else{
+          view.showError("No se pudo agregar correctamente");
+      }
+      
 
        
     }
 
-    public void findPatient(String id){
-        
+    public Patient findPatient(String id, Patient paciente){
+       Patient patient = clinic.findPatient(id);
+       if(patient==null){
+           view.showError("Paciente no encontrado");
+       }else{
+        view.showMessage("nombre: " + paciente.getFullName()+ 
+                "/nl Numero de telefono: "+ paciente.getPhone() +
+                 "/nl Edad del paciente: " + paciente.getAge());
+      
+       }
+        return patient;
     }
 
     public void removePatient(String id){
-        
+       if(  clinic.removePatient(id)){
+           view.showMessage("Paciente eliminado correctamente");
+       }
+         
     }
 
     public Iterator<Patient> getPatients(){
+        return clinic.getPatients();
         
     }
 
@@ -77,6 +95,7 @@ public class ClinicControler {
            view.showError("Cita no se pudo agendar correctamente");
            
     }
+       return status;
     }
 
     public Appointment findAppointment(String code)
@@ -87,9 +106,7 @@ public class ClinicControler {
      }
          view.showData(appo);
          return appo;
-     
-      
-        
+       
     }
 
     public boolean rescheduleAppointment(String code, LocalDate newDate, LocalTime newTime){
@@ -106,19 +123,32 @@ public class ClinicControler {
     }
 
     public boolean cancelAppointment(String code){
-        return false;
+        boolean cita = clinic.cancelAppointment(code);
+        if (cita){
+            view.showMessage("Cita cancela exitosamente");
+            
+        }else{
+            view.showError("No se pudo cancelar cita correctamente");
+        }
+        return cita;
     }
 
     public Iterator<Appointment> getAppointments(){
+        
         return null;
     }
 
     public boolean checkInPatient(String patientId){
-        //agregarpaciente a la lista de espera
+        boolean chequeo = clinic.checkInPatient(patientId);
+        if(chequeo){
+            view.showMessage("Nombre del paciente: " + clinic.getPatients());
+            
+        }
         return false;
     }
 
     public Patient getNextPatient(){
+        
         return null;
     }
 
