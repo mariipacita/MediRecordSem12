@@ -94,6 +94,7 @@ public class patientFrm extends javax.swing.JFrame {
         txtCorreoElectronico.setText("jTextField1");
 
         btnVerRegistros.setText("jButton1");
+        btnVerRegistros.addActionListener(this::btnVerRegistrosActionPerformed);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -156,8 +157,10 @@ public class patientFrm extends javax.swing.JFrame {
         jPanel3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 153), 3, true));
 
         btnAdd.setIcon(new javax.swing.ImageIcon("C:\\Users\\PC\\Downloads\\48\\48\\add (4).png")); // NOI18N
+        btnAdd.addActionListener(this::btnAddActionPerformed);
 
         btnRemove.setIcon(new javax.swing.ImageIcon("C:\\Users\\PC\\Downloads\\48\\48\\button_cancel (4).png")); // NOI18N
+        btnRemove.addActionListener(this::btnRemoveActionPerformed);
 
         btnSearch.setIcon(new javax.swing.ImageIcon("C:\\Users\\PC\\Downloads\\32\\32\\filefind (4).png")); // NOI18N
         btnSearch.setText("Buscar");
@@ -170,9 +173,9 @@ public class patientFrm extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(87, 87, 87)
                 .addComponent(btnAdd)
-                .addGap(108, 108, 108)
+                .addGap(130, 130, 130)
                 .addComponent(btnRemove)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 175, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 153, Short.MAX_VALUE)
                 .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(54, 54, 54))
         );
@@ -221,6 +224,18 @@ public class patientFrm extends javax.swing.JFrame {
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRemoveActionPerformed
+
+    private void btnVerRegistrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerRegistrosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnVerRegistrosActionPerformed
 
     /**
      * @param args the command line arguments

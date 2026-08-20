@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Iterator;
 import patients.Patient;
+import waitingRoom.waitingRoomList;
 
 /**
  *
@@ -135,7 +136,8 @@ public class ClinicControler {
 
     public Iterator<Appointment> getAppointments(){
         
-        return null;
+        
+        return clinic.getAppointments();
     }
 
     public boolean checkInPatient(String patientId){
@@ -149,22 +151,23 @@ public class ClinicControler {
 
     public Patient getNextPatient(){
         
-        return null;
+        return clinic.getNextPatient();
     }
 
     public Patient attendNextPatient(){
-        return null;
+        return clinic.attendNextPatient();
     }
 
     public int getWaitingPatientCount(){
-        return 0;
+        return clinic.getWaitingPatientCount();
     }
 
     public boolean isPatientWaiting(String patientId){
-       
+      
+    return  clinic.isPatientWaiting(patientId);
             
         
-        return false;
+   
     }
   
     

@@ -16,9 +16,7 @@ import patients.Patient;
  */
 public class waitingRoomList implements SequentialDynamicLists<Patient> {
     Queue<Patient> waitingList;
-    //queue porque elprimero que llego tiene que ser el primero en pasar a consulta
-    //ya que guarda pacientes qeu estan en sala de espera
-
+  
     public waitingRoomList() {
         this.waitingList = new LinkedList();
     }
