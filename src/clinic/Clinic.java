@@ -45,7 +45,7 @@ public class Clinic {
             return false;
         }
 
-        return patients.remove(patient);
+        return patients.remove(id);
     }
 
     public Iterator<Patient> getPatients() {
