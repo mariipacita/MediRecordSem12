@@ -5,6 +5,8 @@
  */
 package appointments;
 
+import clinic.ClinicControler;
+import clinic.views;
 import java.util.Iterator;
 import javax.swing.table.DefaultTableModel;
 
@@ -15,9 +17,9 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author sharys
  */
-public class AppointmentView extends javax.swing.JFrame implements iView<Appointment> {
+public class AppointmentView extends javax.swing.JFrame implements views<Appointment> {
     private Appointment appointment;
-    private ClinicController controller;
+    private ClinicControler controller;
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AppointmentView.class.getName());
     
@@ -37,7 +39,7 @@ public class AppointmentView extends javax.swing.JFrame implements iView<Appoint
         spnHora.setEditor(
         new javax.swing.JSpinner.DateEditor(spnHora, "HH:mm"));
         
-        cmbPaciente.removeAllItems();
+        txtPaciente.setEditable(false);
         
         javax.swing.table.DefaultTableModel modelo =
             (javax.swing.table.DefaultTableModel) tblCitas.getModel();
@@ -45,23 +47,26 @@ public class AppointmentView extends javax.swing.JFrame implements iView<Appoint
         modelo.setRowCount(0);
         
         setLocationRelativeTo(null);
-        
+    }
         @Override 
         public void clear() {
         txtCodigo.setText("");
-        txtName.setText("");
-        txtDate.setText("");
-        txtTime.setValue("");
         txtMotivo.setText("");
+        spnFecha.setValue(new java.util.Date());
+        spnHora.setValue(new java.util.Date());
+        txtPaciente.setText("");
+        txtIdPaciente.setText("");
+        }
         
         
     }
         @Override
         public void showData(Appointment appo) {
-        this.appointment=appo;
+        this.appointment = appo;
         txtCodigo.setText(appo.getPatient().getId());
-        txtFullName.setText(appo.getPatient().getFullName());
-        txtDate.setText(UtilDate.toString(appo.getDate());
+        txtPaciente.setText(appo.getPatient().getFullName());
+        txtIdPaciente.setText(appo.getPatient().getId());
+        spnFecha.setValue(fecha);
         txtMotivo.setText(appo.getReason());
     }
         @Override
@@ -96,7 +101,8 @@ public class AppointmentView extends javax.swing.JFrame implements iView<Appoint
         txtMotivo = new javax.swing.JTextField();
         spnFecha = new javax.swing.JSpinner();
         spnHora = new javax.swing.JSpinner();
-        cmbPaciente = new javax.swing.JComboBox<>();
+        txtIdPaciente = new javax.swing.JTextField();
+        txtPaciente = new javax.swing.JTextField();
         pblBotones = new javax.swing.JPanel();
         btnAgregar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
@@ -161,13 +167,16 @@ public class AppointmentView extends javax.swing.JFrame implements iView<Appoint
                             .addComponent(IblFecha)
                             .addComponent(IblHora))
                         .addGap(52, 52, 52)
-                        .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtMotivo)
+                        .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtMotivo, javax.swing.GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE)
                             .addComponent(txtCodigo)
                             .addComponent(spnFecha)
                             .addComponent(spnHora)
-                            .addComponent(cmbPaciente, 0, 368, Short.MAX_VALUE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDatosLayout.createSequentialGroup()
+                                .addComponent(txtPaciente)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtIdPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap())
         );
         pnlDatosLayout.setVerticalGroup(
             pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -179,7 +188,8 @@ public class AppointmentView extends javax.swing.JFrame implements iView<Appoint
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(IblPaciente)
-                    .addComponent(cmbPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtIdPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(IblFecha)
@@ -355,14 +365,13 @@ public class AppointmentView extends javax.swing.JFrame implements iView<Appoint
     spnFecha.setValue(new java.util.Date());
     spnHora.setValue(new java.util.Date());
 
-    if (cmbPaciente.getItemCount() > 0) {
-        cmbPaciente.setSelectedIndex(0);
-    }
+    
+    
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         // TODO add your handling code here:
-        dispose();
+       
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
@@ -420,7 +429,6 @@ public class AppointmentView extends javax.swing.JFrame implements iView<Appoint
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnMostrar;
     private javax.swing.JButton btnSalir;
-    private javax.swing.JComboBox<String> cmbPaciente;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JPanel pblBotones;
@@ -431,6 +439,8 @@ public class AppointmentView extends javax.swing.JFrame implements iView<Appoint
     private javax.swing.JSpinner spnHora;
     private javax.swing.JTable tblCitas;
     private javax.swing.JTextField txtCodigo;
+    private javax.swing.JTextField txtIdPaciente;
     private javax.swing.JTextField txtMotivo;
+    private javax.swing.JTextField txtPaciente;
     // End of variables declaration//GEN-END:variables
-}
+
