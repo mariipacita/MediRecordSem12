@@ -9,6 +9,8 @@ import appointments.AppointmentList;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Iterator;
+import medicalrecords.MedicalRecord;
+import medicalrecords.MedicalRecordsList;
 import patients.Patient;
 import patients.patienList;
 import waitingRoom.waitingRoomList;
@@ -22,12 +24,14 @@ public class Clinic {
     private patienList patients;
     private AppointmentList appointments;
     private waitingRoomList waitingRoom;
+    private MedicalRecordsList medicalRecords;
 
     public Clinic() {
 
         this.patients = new patienList();
         this.appointments = new AppointmentList();
         this.waitingRoom = new waitingRoomList();
+        this.medicalRecords = new MedicalRecordsList();
     }
 
     public boolean addPatient(Patient patient) {
@@ -127,5 +131,21 @@ public class Clinic {
         }
 
         return false;
+    }
+    
+    public boolean addMedicalRecord(MedicalRecord medicalRecord) {
+          return medicalRecords.add(medicalRecord);
+    }
+
+    public MedicalRecord getLastMedicalRecord() {
+          return medicalRecords.get();
+    }
+
+    public boolean removeLastMedicalRecord() {
+         return medicalRecords.remove();
+    }
+
+    public Iterator<MedicalRecord> getMedicalRecords() {
+         return medicalRecords.getAll();
     }
 }

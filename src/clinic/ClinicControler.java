@@ -8,6 +8,7 @@ import appointments.Appointment;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Iterator;
+import medicalrecords.MedicalRecord;
 import patients.Patient;
 import waitingRoom.waitingRoomList;
 
@@ -169,6 +170,31 @@ public class ClinicControler {
         
    
     }
+    
+    public boolean addMedicalRecord(String consultationReason, String diagnosis, String treatment, String notes) {
+
+    MedicalRecord medicalRecord = new MedicalRecord( consultationReason,diagnosis,treatment,notes);
+
+    boolean status = clinic.addMedicalRecord(medicalRecord);
+
+    if (status) {
+        view.showMessage("Registro médico guardado correctamente");
+    } else {
+        view.showError("No se pudo guardar el registro médico");
+    }
+
+    return status;
+}
+    
+    public MedicalRecord getLastMedicalRecord() {
+    MedicalRecord medicalRecord = clinic.getLastMedicalRecord();
+
+    if (medicalRecord == null) {
+        view.showError("No hay registros médicos disponibles");
+    }
+
+    return medicalRecord;
+}
   
     
     
