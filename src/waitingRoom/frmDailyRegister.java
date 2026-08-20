@@ -4,19 +4,73 @@
  */
 package waitingRoom;
 
+import appointments.Appointment;
+import java.util.Iterator;
+import patients.Patient;
+
 /**
  *
  * @author PC
  */
-public class frmDailyRegister extends javax.swing.JInternalFrame {
+public class frmDailyRegister extends javax.swing.JInternalFrame implements clinic.views<patients.Patient> {
+    private clinic.ClinicControler controller;
 
     /**
      * Creates new form frmDailyRegister
      */
     public frmDailyRegister() {
         initComponents();
+        controller = clinic.ClinicControler.getInstance(this);
+        controller.setView(this);
         
     }
+    
+    @Override
+     public void clear() {
+    javax.swing.table.DefaultTableModel model =
+            (javax.swing.table.DefaultTableModel) jTable1.getModel();
+
+    model.setRowCount(0);
+}
+
+     @Override
+     public void showData(patients.Patient patient) {
+    if (patient == null) {
+        return;
+    }
+
+    javax.swing.table.DefaultTableModel model =
+            (javax.swing.table.DefaultTableModel) jTable1.getModel();
+
+    model.addRow(new Object[]{
+        null,
+        patient.getId(),
+        patient.getFullName(),
+        null,
+        null,
+        true
+    });
+}
+     @Override
+    public void showError(String error) {
+    javax.swing.JOptionPane.showMessageDialog(
+            this,
+            error,
+            "Error",
+            javax.swing.JOptionPane.ERROR_MESSAGE
+    );
+}
+
+     @Override
+    public void showMessage(String message) {
+    javax.swing.JOptionPane.showMessageDialog(
+            this,
+            message,
+            "Sala de espera",
+            javax.swing.JOptionPane.INFORMATION_MESSAGE
+    );
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -32,6 +86,7 @@ public class frmDailyRegister extends javax.swing.JInternalFrame {
         jPanel2 = new javax.swing.JPanel();
         btnExit = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
+        btnBuscar1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
@@ -61,9 +116,14 @@ public class frmDailyRegister extends javax.swing.JInternalFrame {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 153), 3));
 
-        btnExit.setText("jButton1");
+        btnExit.setText("Exit");
+        btnExit.addActionListener(this::btnExitActionPerformed);
 
-        btnBuscar.setText("jButton1");
+        btnBuscar.setText("Cargar Citas");
+        btnBuscar.addActionListener(this::btnBuscarActionPerformed);
+
+        btnBuscar1.setText("Check In");
+        btnBuscar1.addActionListener(this::btnBuscar1ActionPerformed);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -73,7 +133,9 @@ public class frmDailyRegister extends javax.swing.JInternalFrame {
                 .addGap(40, 40, 40)
                 .addComponent(btnExit)
                 .addGap(50, 50, 50)
-                .addComponent(btnBuscar)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnBuscar1)
+                    .addComponent(btnBuscar))
                 .addContainerGap(64, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -83,7 +145,9 @@ public class frmDailyRegister extends javax.swing.JInternalFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnExit)
                     .addComponent(btnBuscar))
-                .addContainerGap(57, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btnBuscar1)
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -151,9 +215,80 @@ public class frmDailyRegister extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnExitActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        javax.swing.table.DefaultTableModel model =
+        (javax.swing.table.DefaultTableModel) jTable1.getModel();
+
+        model.setRowCount(0);
+
+       java.util.Iterator<appointments.Appointment> appointments =
+        controller.getAppointments();
+
+        if (appointments == null) {
+        showMessage("No hay citas registradas");
+        return;
+}
+
+        int appointmentsToday = 0;
+
+        while (appointments.hasNext()) {
+        appointments.Appointment appointment =
+            appointments.next();
+
+        if (appointment.getDate().equals(
+            java.time.LocalDate.now())) {
+
+        patients.Patient patient =
+                appointment.getPatient();
+
+        boolean waiting =
+                controller.isPatientWaiting(patient.getId());
+
+        model.addRow(new Object[]{
+            appointment.getCode(),
+            patient.getId(),
+            patient.getFullName(),
+            appointment.getDate(),
+            appointment.getTime(),
+            waiting
+        });
+
+        appointmentsToday++;
+    }
+}
+
+     if (appointmentsToday == 0) {
+    showMessage("No hay citas programadas para hoy");
+}
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnBuscar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscar1ActionPerformed
+        int selectedRow = jTable1.getSelectedRow();
+
+    if (selectedRow == -1) {
+    showError("Debe seleccionar una cita de la tabla");
+    return;
+}
+
+      String patientId =
+        jTable1.getValueAt(selectedRow, 1).toString();
+
+      boolean added =
+        controller.checkInPatient(patientId);
+
+     if (added) {
+    jTable1.setValueAt(true, selectedRow, 5);
+}
+    }//GEN-LAST:event_btnBuscar1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnBuscar1;
     private javax.swing.JButton btnExit;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
@@ -161,4 +296,5 @@ public class frmDailyRegister extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
+
 }

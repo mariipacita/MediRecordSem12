@@ -120,18 +120,22 @@ public class Clinic {
     }
 
     public boolean isPatientWaiting(String patientId) {
-        Iterator iterator = waitingRoom.getAll();
+    Iterator iterator = waitingRoom.getAll();
 
-        while (iterator.hasNext()) {
-            Patient patient = (Patient) iterator.next();
-
-            if (patient.getId().equals(patientId)) {
-                return true;
-            }
-        }
-
+    if (iterator == null) {
         return false;
     }
+
+    while (iterator.hasNext()) {
+        Patient patient = (Patient) iterator.next();
+
+        if (patient.getId().equals(patientId)) {
+            return true;
+        }
+    }
+
+    return false;
+}
     
     public boolean addMedicalRecord(MedicalRecord medicalRecord) {
           return medicalRecords.add(medicalRecord);

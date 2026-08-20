@@ -141,23 +141,49 @@ public class ClinicControler {
         return clinic.getAppointments();
     }
 
-    public boolean checkInPatient(String patientId){
-        boolean chequeo = clinic.checkInPatient(patientId);
-        if(chequeo){
-            view.showMessage("Nombre del paciente: " + clinic.getPatients());
-            
-        }
-        return false;
+    public boolean checkInPatient(String patientId) {
+    boolean status = clinic.checkInPatient(patientId);
+
+    if (status) {
+        view.showMessage(
+                "Paciente agregado a la sala de espera"
+        );
+    } else {
+        view.showError(
+                "No se pudo agregar el paciente a la sala de espera"
+        );
     }
 
-    public Patient getNextPatient(){
-        
-        return clinic.getNextPatient();
+    return status;
+}
+
+    public Patient getNextPatient() {
+    Patient patient = clinic.getNextPatient();
+
+    if (patient == null) {
+        view.showError(
+                "No hay pacientes en la sala de espera"
+        );
     }
 
-    public Patient attendNextPatient(){
-        return clinic.attendNextPatient();
+    return patient;
+}
+
+    public Patient attendNextPatient() {
+    Patient patient = clinic.attendNextPatient();
+
+    if (patient == null) {
+        view.showError(
+                "No hay pacientes para atender"
+        );
+    } else {
+        view.showMessage(
+                "Paciente atendido correctamente"
+        );
     }
+
+    return patient;
+}
 
     public int getWaitingPatientCount(){
         return clinic.getWaitingPatientCount();
