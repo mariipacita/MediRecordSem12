@@ -1,3 +1,4 @@
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -9,11 +10,14 @@ import javax.swing.table.DefaultTableModel;
 
 
 
+
 /**
  *
  * @author sharys
  */
-public class AppointmentView extends javax.swing.JFrame {
+public class AppointmentView extends javax.swing.JFrame implements iView<Appointment> {
+    private Appointment appointment;
+    private ClinicController controller;
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AppointmentView.class.getName());
     
@@ -41,6 +45,32 @@ public class AppointmentView extends javax.swing.JFrame {
         modelo.setRowCount(0);
         
         setLocationRelativeTo(null);
+        
+        @Override 
+        public void clear() {
+        txtCodigo.setText("");
+        txtName.setText("");
+        txtDate.setText("");
+        txtTime.setValue("");
+        txtMotivo.setText("");
+        
+        
+    }
+        @Override
+        public void showData(Appointment appo) {
+        this.appointment=appo;
+        txtCodigo.setText(appo.getPatient().getId());
+        txtFullName.setText(appo.getPatient().getFullName());
+        txtDate.setText(UtilDate.toString(appo.getDate());
+        txtMotivo.setText(appo.getReason());
+    }
+        @Override
+        public void showError(String er) {
+        UtilGui.showError(this, "Administracion de citas", er);
+    }
+        @Override
+        public void showMessage(String msg) {
+        UtilGui.showMessage(this, "Administracion de citas", msg);
 
             
     }
@@ -91,15 +121,20 @@ public class AppointmentView extends javax.swing.JFrame {
         IblCodigo.setText("Codigo");
 
         txtCodigo.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
+        txtCodigo.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtCodigoFocusLost(evt);
+            }
+        });
 
         IblPaciente.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
         IblPaciente.setText("Paciente");
 
         IblFecha.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
-        IblFecha.setText("Fecha");
+        IblFecha.setText("Fecha de la cita");
 
         IblHora.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
-        IblHora.setText("Hora");
+        IblHora.setText("Hora de la cita");
 
         IblMotivo.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
         IblMotivo.setText("Motivo");
@@ -201,7 +236,7 @@ public class AppointmentView extends javax.swing.JFrame {
                 .addComponent(btnLimpiar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnSalir)
-                .addContainerGap(7, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pblBotonesLayout.setVerticalGroup(
             pblBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -235,7 +270,7 @@ public class AppointmentView extends javax.swing.JFrame {
         pnlTablaLayout.setHorizontalGroup(
             pnlTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlTablaLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(28, Short.MAX_VALUE)
                 .addComponent(scrollCitas, javax.swing.GroupLayout.PREFERRED_SIZE, 509, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -255,20 +290,19 @@ public class AppointmentView extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(pnlTabla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(pblBotones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(pnlDatos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(pblBotones, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnlDatos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(17, 17, 17))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(16, 16, 16)
                     .addComponent(jButton4)
-                    .addContainerGap(460, Short.MAX_VALUE)))
+                    .addContainerGap(482, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(26, 26, 26)
                     .addComponent(jButton5)
-                    .addContainerGap(450, Short.MAX_VALUE)))
+                    .addContainerGap(472, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -335,6 +369,19 @@ public class AppointmentView extends javax.swing.JFrame {
         // TODO add your handling code here:
    
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void txtCodigoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCodigoFocusLost
+        // TODO add your handling code here:
+        String codigo=txtCodigo.getText();
+        if(codigo.trim().equals("")) return;
+       Patient pat = controller.findPatient(codigo);
+       if (pat==null) {
+           showError("El paciente no existe");
+           clear();
+           return;
+       }
+       txtName.setText(pat.getFullName());
+    }//GEN-LAST:event_txtCodigoFocusLost
 
     /**
      * @param args the command line arguments
