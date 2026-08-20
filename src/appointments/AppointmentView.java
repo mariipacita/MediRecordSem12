@@ -15,6 +15,7 @@ import patients.Patient;
 
 
 
+
 /**
  *
  * @author sharys
@@ -32,6 +33,8 @@ public class AppointmentView extends javax.swing.JFrame implements views<Appoint
      */
     public AppointmentView() {
         initComponents();
+        
+        controller= ClinicControler.getInstance(this);
       
         spnFecha.setModel(new javax.swing.SpinnerDateModel());
         spnFecha.setEditor(
@@ -66,8 +69,8 @@ public class AppointmentView extends javax.swing.JFrame implements views<Appoint
         public void showData(Appointment appo) {
         this.appointment = appo;
         txtCodigo.setText(appo.getCode());
-        txtPaciente.setText(appo.getPatient().getFullName());
         txtIdPaciente.setText(appo.getPatient().getId());
+        txtPaciente.setText(appo.getPatient().getFullName());
         spnFecha.setValue(java.sql.Date.valueOf(appo.getDate()));
         spnHora.setValue(java.sql.Time.valueOf(appo.getTime()));
         txtMotivo.setText(appo.getReason());
@@ -82,6 +85,15 @@ public class AppointmentView extends javax.swing.JFrame implements views<Appoint
 
             
     }
+        private java.time.LocalDate obtenerFecha(){
+            java.util.Date fecha = (java.util.Date) spnFecha.getValue();
+            return new java.sql.Date(fecha.getTime()).toLocalDate();
+        }
+        
+        private java.time.LocalTime obtenerHora(){
+            java.util.Date hora = (java.util.Date) spnHora.getValue();
+            return new java.sql.Time(hora.getTime()).toLocalTime();
+        }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -154,6 +166,14 @@ public class AppointmentView extends javax.swing.JFrame implements views<Appoint
         spnFecha.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
 
         spnHora.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
+
+        txtIdPaciente.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtIdPacienteFocusLost(evt);
+            }
+        });
+
+        txtPaciente.addActionListener(this::txtPacienteActionPerformed);
 
         javax.swing.GroupLayout pnlDatosLayout = new javax.swing.GroupLayout(pnlDatos);
         pnlDatos.setLayout(pnlDatosLayout);
@@ -348,52 +368,110 @@ public class AppointmentView extends javax.swing.JFrame implements views<Appoint
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         // TODO add your handling code here:
+        String codigo = txtCodigo.getText();
+        String id = txtIdPaciente.getText();
+        String motivo = txtMotivo.getText();
+        
+        if(codigo.isBlank() || id.isBlank() || motivo.isBlank()){
+            showError("Debe completar todos los campos");
+            return;
+        }
+        
+        Patient paciente = controller.getClinic().findPatient(id);
+        if(paciente == null){
+            showError("El paciente no existe");
+            return;
+        }
+        Appointment cita = new Appointment(codigo, paciente, obtenerFecha(), obtenerHora(),motivo);
+        controller.scheduleAppointment(cita);
+        clear();
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
+        String codigo = txtCodigo.getText();
+        if(codigo.isBlank()){
+            showError("Digite el codigo de la cita");
+            return;
+        }
+        controller.findAppointment(codigo);
    
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnMostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarActionPerformed
         // TODO add your handling code here:
+        DefaultTableModel modelo = (DefaultTableModel) tblCitas.getModel();
+        modelo.setRowCount(0);
+
+        Iterator<Appointment> citas = controller.getAppointments();
+
+        if (citas == null) {
+        showError("No hay citas para mostrar");
+        return;
+    }
+
+    while (citas.hasNext()) {
+
+        Appointment cita = citas.next();
+
+        modelo.addRow(new Object[]{
+            cita.getCode(),
+            cita.getPatient().getFullName(),
+            cita.getDate(),
+            cita.getTime(),
+            cita.getReason(),
+            cita.getStatus().getStatus()
+        });
+    }
   
     }//GEN-LAST:event_btnMostrarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         // TODO add your handling code here:
-   txtCodigo.setText("");
-    txtMotivo.setText("");
-
-    spnFecha.setValue(new java.util.Date());
-    spnHora.setValue(new java.util.Date());
-
+  clear();
     
     
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         // TODO add your handling code here:
-       
+       dispose();
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
-   
+   String codigo = txtCodigo.getText();
+   if(codigo.isBlank()){
+       showError("Digite el codigo de la cita");
+       return;
+   }
+   controller.cancelAppointment(codigo);
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void txtCodigoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCodigoFocusLost
         // TODO add your handling code here:
-        String id=txtIdPaciente.getText();
-        if(id.trim().equals("")) return;
-       Patient pat = controller.getClinic().findPatient(id);
-       if (pat==null) {
-           showError("El paciente no existe");
-           clear();
-           return;
-       }
-       txtPaciente.setText(pat.getFullName());
+        
+       
     }//GEN-LAST:event_txtCodigoFocusLost
+
+    private void txtIdPacienteFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIdPacienteFocusLost
+        // TODO add your handling code here:
+        String id= txtIdPaciente.getText();
+        if(id.isBlank()){
+            return;
+        }
+        Patient pat= controller.getClinic().findPatient(id);
+        if(pat== null){
+            showError("El paciente no existe");
+            txtPaciente.setText("");
+            return;
+        }
+        txtPaciente.setText(pat.getFullName());
+    }//GEN-LAST:event_txtIdPacienteFocusLost
+
+    private void txtPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPacienteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPacienteActionPerformed
 
     /**
      * @param args the command line arguments
