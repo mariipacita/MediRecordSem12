@@ -9,6 +9,8 @@ import clinic.ClinicControler;
 import clinic.views;
 import java.util.Iterator;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JOptionPane;
+import patients.Patient;
 
 
 
@@ -59,23 +61,24 @@ public class AppointmentView extends javax.swing.JFrame implements views<Appoint
         }
         
         
-    }
+    
         @Override
         public void showData(Appointment appo) {
         this.appointment = appo;
-        txtCodigo.setText(appo.getPatient().getId());
+        txtCodigo.setText(appo.getCode());
         txtPaciente.setText(appo.getPatient().getFullName());
         txtIdPaciente.setText(appo.getPatient().getId());
-        spnFecha.setValue(fecha);
+        spnFecha.setValue(java.sql.Date.valueOf(appo.getDate()));
+        spnHora.setValue(java.sql.Time.valueOf(appo.getTime()));
         txtMotivo.setText(appo.getReason());
     }
         @Override
         public void showError(String er) {
-        UtilGui.showError(this, "Administracion de citas", er);
+        JOptionPane.showMessageDialog(this, "Administracion de citas" + er);
     }
         @Override
         public void showMessage(String msg) {
-        UtilGui.showMessage(this, "Administracion de citas", msg);
+        JOptionPane.showMessageDialog(this, "Administracion de citas"+ msg);
 
             
     }
@@ -381,15 +384,15 @@ public class AppointmentView extends javax.swing.JFrame implements views<Appoint
 
     private void txtCodigoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCodigoFocusLost
         // TODO add your handling code here:
-        String codigo=txtCodigo.getText();
-        if(codigo.trim().equals("")) return;
-       Patient pat = controller.findPatient(codigo);
+        String id=txtIdPaciente.getText();
+        if(id.trim().equals("")) return;
+       Patient pat = controller.getClinic().findPatient(id);
        if (pat==null) {
            showError("El paciente no existe");
            clear();
            return;
        }
-       txtName.setText(pat.getFullName());
+       txtPaciente.setText(pat.getFullName());
     }//GEN-LAST:event_txtCodigoFocusLost
 
     /**
@@ -444,3 +447,4 @@ public class AppointmentView extends javax.swing.JFrame implements views<Appoint
     private javax.swing.JTextField txtPaciente;
     // End of variables declaration//GEN-END:variables
 
+}
